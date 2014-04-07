@@ -3,7 +3,14 @@ Created on 06/apr/2014
 
 @author: Andrea
 '''
-
+def open_file(name): # Quick function to open or create files used by main
+    try:
+        f_new=open(name,"r+")
+    except IOError:
+        f_new=open(name,"w")
+        f_new.close()
+        f_new=open(name,"r+")
+    return f_new
 def close_files(): # Quick function to close every file used by main
     f_user.close()
     f_nerd.close()
@@ -59,10 +66,10 @@ def info(): # Prints info about version and creators
 if __name__ == '__main__':
     # Setting main quit flag
     flag=0 
-    # Opening useful files
-    f_user=open("username.txt","r+")
-    f_nerd=open("nerdmode.txt","r+")
-    f_check=open("checkpoints.txt","r+")
+    # Opening useful files, creates them if they don't exist
+    f_user=open_file("username.txt")
+    f_nerd=open_file("nerdmode.txt")
+    f_check=open_file("checkpoints.txt")
     # Copying settings from files to a list for better use and edit properties
     settings_list=[f_user.read(),f_nerd.read()]
     # Menu loop until user wants to exit
@@ -91,4 +98,4 @@ if __name__ == '__main__':
             # Wrong input
             print "Invalid choice, try again."  
     # File closing before closing the app
-    close_files()   
+    close_files()
