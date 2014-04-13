@@ -116,7 +116,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
             except ValueError:
                 pass
             try:                
-                # Using a list, easier to use an can be modified. Copying in it each property of the checkpoint to be edited, then the checkpoint is popped from the dictionary
+                # Using a list, easier to use and can be modified. Copying in it each property of the checkpoint to be edited, then the checkpoint is popped from the dictionary
                 c_temp=[]
                 c_temp.append(checkpoints_dictionary[check_to_see][0])
                 c_temp.append(checkpoints_dictionary[check_to_see][1])
