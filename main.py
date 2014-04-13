@@ -63,23 +63,20 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
             check_to_see=raw_input("Insert checkpoint name (case sensitive!) or number: >")
             # Avoiding errors and using different layouts for GPS and physical checkpoints
             try:
-                if checkpoints_dictionary[check_to_see][0]=="GPS":
-                    print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nCheckpoint Coordinates: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint proximity class: "+checkpoints_dictionary[check_to_see][2]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")
-                else:
+                check_to_see=index_to_checkpoint(int(check_to_see))
+            except ValueError:
+                pass
+            try:             
+                if check_to_see!='0' and checkpoints_dictionary[check_to_see][0]=="GPS":
+                      print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nCheckpoint Coordinates: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint proximity class: "+checkpoints_dictionary[check_to_see][2]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")    
+                elif check_to_see!='0':
                     print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nRaspberry Pi IP: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")
+                else:
+                    print('Bad input.\n')
             except KeyError:
-                try:
-                    check_to_see=index_to_checkpoint(int(check_to_see))
-                    if check_to_see!='0' and checkpoints_dictionary[check_to_see][0]=="GPS":
-                        print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nCheckpoint Coordinates: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint proximity class: "+checkpoints_dictionary[check_to_see][2]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")    
-                    elif check_to_see!='0':
-                        print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nRaspberry Pi IP: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")
-                    else:
-                        print('Bad input.\n')
-                except KeyError:
-                    print("Bad input.\n")
-                except ValueError:
-                    print("Bad input.\n")
+                print("Bad input.\n")
+            except ValueError:
+                print("Bad input.\n")
         # Add New Checkpoint
         elif c_choice=='A' or c_choice=='a':
             new_check=[] 
@@ -113,6 +110,10 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
             check_to_see=raw_input("Insert checkpoint name (case sensitive!) or number: >")
             # Avoiding errors and using different layouts for GPS and physical checkpoints
             try:
+                check_to_see=index_to_checkpoint(int(check_to_see))
+            except ValueError:
+                pass
+            try:                
                 c_temp=[]
                 c_temp.append(checkpoints_dictionary[check_to_see][0])
                 c_temp.append(checkpoints_dictionary[check_to_see][1])
@@ -154,52 +155,9 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
                     c_temp[3]=s_temp[0]
                 checkpoints_dictionary[new_name]=c_temp
             except KeyError:
-                try:
-                    check_to_see=index_to_checkpoint(int(check_to_see))
-                    c_temp=[]
-                    c_temp.append(checkpoints_dictionary[check_to_see][0])
-                    c_temp.append(checkpoints_dictionary[check_to_see][1])
-                    c_temp.append(checkpoints_dictionary[check_to_see][2])
-                    c_temp.append(checkpoints_dictionary[check_to_see][3])
-                    checkpoints_dictionary.pop(check_to_see)
-                    s_temp=[]
-                    s_temp.append(raw_input("Insert new name (leave blank to let it the same ("+check_to_see+"): >"))
-                    if s_temp[0]!="":
-                        new_name=s_temp[0]
-                    else:
-                        new_name=check_to_see
-                    if settings_list[1]=="1":
-                        s_temp[0]=raw_input("Insert new type (leave blank to let it the same ("+c_temp[0]+") (1 for GPS, 2 for Physical): >")
-                        while s_temp[0]!="1" and s_temp[0]!="2" and s_temp[0]!="":
-                            s_temp[0]=raw_input("Bad Input. Insert new type (leave blank to let it the same ("+c_temp[0]+") (1 for GPS, 2 for Physical): >")
-                        if s_temp[0]=="1":
-                            c_temp[0]="GPS"
-                        elif s_temp[0]=="2":
-                            c_temp[0]="Physical"
-                    if c_temp[0]=="GPS":
-                        s_temp[0]=raw_input("Insert new coordinates (leave blank to let it the same ("+c_temp[1]+"): >")
-                        if s_temp[0]!="":
-                            c_temp[1]=s_temp[0]
-                    else:
-                        s_temp[0]=raw_input("Insert new Raspberry Pi IP (leave blank to let it the same ("+c_temp[1]+"): >")
-                        if s_temp[0]!="":
-                            c_temp[1]=s_temp[0]
-                    if c_temp[0]=="GPS":
-                        s_temp[0]=raw_input("Insert new Checkpoint Proximity Class (leave blank to let it the same ("+c_temp[2]+") (0: <10mt, 1: <25mt, 2: <100mt, 3: <1km, 4: <10km): >")
-                        while s_temp[0]!="0" and s_temp[0]!="1" and s_temp[0]!="2" and s_temp[0]!="3" and s_temp[0]!="4" and s_temp[0]!="":
-                            s_temp[0]=raw_input("Bad input. Insert new Checkpoint Proximity Class (leave blank to let it the same ("+c_temp[2]+") (0: <10mt, 1: <25mt, 2: <100mt, 3: <1km, 4: <10km): >")
-                        if s_temp[0]!="":
-                            c_temp[2]=s_temp[0]
-                    s_temp[0]=raw_input("Insert new Trivia Hint (leave blank to let it the same ("+c_temp[3]+"), write 0 to delete: >")
-                    if s_temp[0]=="0":
-                        c_temp[3]=""
-                    elif s_temp[0]!="":
-                        c_temp[3]=s_temp[0]
-                    checkpoints_dictionary[new_name]=c_temp
-                except KeyError:
-                    print("Bad input.\n")
-                except ValueError:
-                    print("Bad input.\n")
+                print("Bad input.\n")
+            except ValueError:
+                print("Bad input.\n")
             checkpoints_update()
         elif c_choice=='D' or c_choice=='d':
             check_to_see=raw_input("Insert checkpoint name (case sensitive!) or number: >")
@@ -214,6 +172,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
                     print("Bad input.\n")
                 except ValueError:
                     print("Bad input.\n")
+            checkpoints_update()
         # Back to main menu
         elif c_choice=='B' or c_choice=='b': 
             escape=1
