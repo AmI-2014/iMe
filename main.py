@@ -66,9 +66,10 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
                 check_to_see=index_to_checkpoint(int(check_to_see))
             except ValueError:
                 pass
-            try:             
+            try:
+                # Printing properties             
                 if check_to_see!='0' and checkpoints_dictionary[check_to_see][0]=="GPS":
-                      print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nCheckpoint Coordinates: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint proximity class: "+checkpoints_dictionary[check_to_see][2]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")    
+                    print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nCheckpoint Coordinates: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint proximity class: "+checkpoints_dictionary[check_to_see][2]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")    
                 elif check_to_see!='0':
                     print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nRaspberry Pi IP: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")
                 else:
@@ -81,6 +82,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
         elif c_choice=='A' or c_choice=='a':
             new_check=[] 
             new_check_name=raw_input("Insert Checkpoint Name: >")
+            # Just a lot of questions by the program and answers by the user, nothing much
             # If NerdMode is ON, asking type of checkpoint. Else, setting it to GPS.
             if settings_list[1]=="1":
                 new_check.append(raw_input("Insert Checkpoint Type (1 for GPS, 2 for Physical): >"))
@@ -114,6 +116,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
             except ValueError:
                 pass
             try:                
+                # Using a list, easier to use an can be modified. Copying in it each property of the checkpoint to be edited, then the checkpoint is popped from the dictionary
                 c_temp=[]
                 c_temp.append(checkpoints_dictionary[check_to_see][0])
                 c_temp.append(checkpoints_dictionary[check_to_see][1])
@@ -121,6 +124,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
                 c_temp.append(checkpoints_dictionary[check_to_see][3])
                 checkpoints_dictionary.pop(check_to_see)
                 s_temp=[]
+                # Again, just a bunch of questions and answers
                 s_temp.append(raw_input("Insert new name (leave blank to let it the same ("+check_to_see+"): >"))
                 if s_temp[0]!="":
                     new_name=s_temp[0]
@@ -163,15 +167,15 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
             check_to_see=raw_input("Insert checkpoint name (case sensitive!) or number: >")
             # Avoiding errors and using different layouts for GPS and physical checkpoints
             try:
+                check_to_see=index_to_checkpoint(int(check_to_see))
+            except ValueError:
+                pass
+            try:
                 checkpoints_dictionary.pop(check_to_see)
             except KeyError:
-                try:
-                    check_to_see=index_to_checkpoint(int(check_to_see))
-                    checkpoints_dictionary.pop(check_to_see)
-                except KeyError:
-                    print("Bad input.\n")
-                except ValueError:
-                    print("Bad input.\n")
+                print("Bad input.\n")
+            except ValueError:
+                print("Bad input.\n")
             checkpoints_update()
         # Back to main menu
         elif c_choice=='B' or c_choice=='b': 
