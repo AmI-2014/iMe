@@ -23,28 +23,51 @@ def nerdmode_update(): # Updates NerdMode when changed by rewriting nerdmode.txt
     f_nerd.seek(0)
     f_nerd.truncate()
     f_nerd.write(settings_list[1])
-def copy_checkpoints(): # Copies checkpoints to a dictionary for a better use
-    for line in f_check:
+def create_game_file(): # Creates the new game file to be uploaded to the server
+    pass
+def read_game_file(): # Reads a game file and copies its content in memory
+    pass
+def checkpoints_file_to_dict(f_in): # Copies checkpoints from a file to a dictionary for a better use, returning the dictionary itself
+    check_dict={}
+    for line in f_in:
         # Every checkpoint name is defined by an asterisk char before it
         if line[0]=='*': 
             ntemp=line.replace('*','')
             temp=ntemp.replace('\n','')
-            checkpoints_dictionary[temp]=[]
+            check_dict[temp]=[]
         else:
-            checkpoints_dictionary[temp].append(line.replace('\n',''))
-def checkpoints_update(): # Updates the checkpoints.txt file
-    f_check.seek(0)
-    f_check.truncate()
-    for key in checkpoints_dictionary:
-        f_check.write('*'+key+'\n')
-        for i in range(0,len(checkpoints_dictionary[key])):
-            f_check.write(checkpoints_dictionary[key][i]+'\n')
+            check_dict[temp].append(line.replace('\n',''))
+    return check_dict
+def checkpoints_dict_to_file(f_out,check_dict): # Copies checkpoints from a dictionary to a file
+    f_out.seek(0)
+    f_out.truncate()
+    for key in check_dict:
+        f_out.write('*'+key+'\n')
+        for i in range(0,len(check_dict[key])):
+            f_out.write(check_dict[key][i]+'\n')
 def main_menu(): # Prints the main menu and returns the user choice
     return raw_input("MAIN MENU\nN - Create New Game\nP - Play a Game\nC - Manage Checkpoints\nS - Settings\nI - Info\nQ - Quit\nChoice: >")
-def new_game(): # Creation of a new Treasure Hunt
-    pass
+def new_game(): # Creation of a new Treasure Hunt, either fully randomized or not
+    escape=0
+    # Menu loop until going back
+    while escape==0: 
+        g_choice=raw_input("NEW GAME\nR - New Random Game\nN - New Normal Game\nB - Back to Main Menu\nChoice: >")
+        # New Random Game
+        if g_choice=='R' or g_choice=='r': 
+            new_random_game() 
+        # New Non-Random Game
+        elif g_choice=='N' or g_choice=='n': 
+            new_normal_game()
+        # Back to main menu
+        elif g_choice=='B' or g_choice=='b': 
+            escape=1
+        else:
+            print "Invalid choice, try again."     
 def play_game(): # Start a new game using its ID
-    game_id=raw_input("Enter game ID: >")
+    pass
+def new_random_game():
+    pass
+def new_normal_game():
     pass
 def manage_checkpoints(): # Uses the checkpoints.txt file to manage them 
     # Setting flag for settings menu loop until user wants to go back to main menu
@@ -106,7 +129,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
                 new_check[2]=raw_input("Wrong Input. Insert Checkpoint Proximity Class (0: <10mt, 1: <25mt, 2: <100mt, 3: <1km, 4: <10km): >")
             new_check.append(raw_input("Insert Checkpoint Trivia Question (if wanted): >"))
             checkpoints_dictionary[new_check_name]=new_check
-            checkpoints_update()
+            checkpoints_dict_to_file(f_check,checkpoints_dictionary)
         # Edit existing Checkpoint
         elif c_choice=='E' or c_choice=='e':
             check_to_see=raw_input("Insert checkpoint name (case sensitive!) or number: >")
@@ -116,7 +139,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
             except ValueError:
                 pass
             try:                
-                # Using a list, easier to use and can be modified. Copying in it each property of the checkpoint to be edited, then the checkpoint is popped from the dictionary
+                # Using a list, easier to use an can be modified. Copying in it each property of the checkpoint to be edited, then the checkpoint is popped from the dictionary
                 c_temp=[]
                 c_temp.append(checkpoints_dictionary[check_to_see][0])
                 c_temp.append(checkpoints_dictionary[check_to_see][1])
@@ -162,7 +185,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
                 print("Bad input.\n")
             except ValueError:
                 print("Bad input.\n")
-            checkpoints_update()
+            checkpoints_dict_to_file(f_check,checkpoints_dictionary)
         elif c_choice=='D' or c_choice=='d':
             check_to_see=raw_input("Insert checkpoint name (case sensitive!) or number: >")
             # Avoiding errors and using different layouts for GPS and physical checkpoints
@@ -176,7 +199,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
                 print("Bad input.\n")
             except ValueError:
                 print("Bad input.\n")
-            checkpoints_update()
+            checkpoints_dict_to_file(f_check,checkpoints_dictionary)
         # Back to main menu
         elif c_choice=='B' or c_choice=='b': 
             escape=1
@@ -205,6 +228,7 @@ def settings(): # Allow the user to change settings like username and nerdmode
         elif s_choice=='R' or s_choice=='r': 
             f_check.seek(0)
             f_check.truncate()
+            checkpoints_dictionary.clear()
         # Changing nerdmode
         elif s_choice=='N' or s_choice=='n': 
             settings_list[1]=raw_input("Insert 1 to enable Nerd Mode, 0 to Disable. >")
@@ -231,8 +255,7 @@ if __name__ == '__main__':
     # Copying settings from files to a list for better use and edit properties
     settings_list=[f_user.read(),f_nerd.read()]
     # Copying checkpoints to a dictionary for better use and edit properties
-    checkpoints_dictionary={}
-    copy_checkpoints()
+    checkpoints_dictionary=checkpoints_file_to_dict(f_check)
     # Menu loop until user wants to exit
     while flag==0:
         # main_menu returns user's choice
