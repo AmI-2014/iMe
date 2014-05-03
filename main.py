@@ -3,6 +3,8 @@ Created on 06/apr/2014
 
 @author: Andrea
 '''
+import smtplib
+
 def open_file(name): # Quick function to open or create files used by main
     try:
         f_new=open(name,"r+")
@@ -11,10 +13,29 @@ def open_file(name): # Quick function to open or create files used by main
         f_new.close()
         f_new=open(name,"r+")
     return f_new
+def starting_settings(settings_list): # First settings
+    for i in range(0,3):
+        if settings_list[i]=="":
+            if i==0:
+                settings_list[i]=raw_input("Write your username! >")
+                username_update()
+            elif i==1:
+                choice="a"
+                while choice!="y" and choice!="n" and choice!="Y" and choice!="N":
+                    choice=raw_input("Do you want to use Bluetooth dongles for your checkpoints? (y/n) >")
+                    if choice=="y" or choice=="Y":
+                        settings_list[i]="1"
+                    else:
+                        settings_list[i]="0"
+                nerdmode_update()
+            elif i==2:
+                settings_list[i]=raw_input("Write your Raspberry Pi IP: >")
+                ip_update()
 def close_files(): # Quick function to close every file used by main
     f_user.close()
     f_nerd.close()
-    f_check.close()   
+    f_check.close()
+    f_ip.close()
 def username_update(): # Updates username when changed by rewriting username.txt
     f_user.seek(0)
     f_user.truncate()
@@ -23,6 +44,10 @@ def nerdmode_update(): # Updates NerdMode when changed by rewriting nerdmode.txt
     f_nerd.seek(0)
     f_nerd.truncate()
     f_nerd.write(settings_list[1])
+def ip_update(): # Updates Raspberry IP when changed by rewriting raspberry_ip.txt
+    f_ip.seek(0)
+    f_ip.truncate()
+    f_ip.write(settings_list[2])
 def create_game_file(): # Creates the new game file to be uploaded to the server
     pass
 def read_game_file(): # Reads a game file and copies its content in memory
@@ -74,7 +99,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
     escape=0
     # Menu loop until going back
     while escape==0: 
-        c_choice=raw_input("MANAGE CHECKPOINTS\nV - View list of your local checkpoints\nP - View Properties of a single Checkpoint\nA - Add New Checkpoint\nE - Edit Checkpoint\nD - Delete Checkpoint\nB - Back to Main Menu\nChoice: >")
+        c_choice=raw_input("MANAGE CHECKPOINTS\nV - View list of your local checkpoints\nP - View Properties of a single Checkpoint\nA - Add New Checkpoint\nE - Edit Checkpoint\nD - Delete Checkpoint\nS - Send Checkpoint suggestion\nB - Back to Main Menu\nChoice: >")
         # Print checkpoints list
         if c_choice=='V' or c_choice=='v': 
             i=1
@@ -200,6 +225,23 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
             except ValueError:
                 print("Bad input.\n")
             checkpoints_dict_to_file(f_check,checkpoints_dictionary)
+        #Checkpoints suggestions    
+        elif c_choice=='S' or c_choice=='s': 
+            check_to_send=raw_input("Insert checkpoint name (case sensitive!) or number: >")
+            try:
+                check_to_send=index_to_checkpoint(int(check_to_send))
+            except ValueError:
+                pass
+            try:
+                message=""
+                for i in range(0,len(checkpoints_dictionary[check_to_send])):
+                    message+=(checkpoints_dictionary[key][i]+'\n')
+                sendemail(check_to_send,message)
+                print("Suggestion sent!\n")
+            except KeyError:
+                print("Bad input.\n")
+            except ValueError:
+                print("Bad input.\n")
         # Back to main menu
         elif c_choice=='B' or c_choice=='b': 
             escape=1
@@ -218,7 +260,7 @@ def settings(): # Allow the user to change settings like username and nerdmode
     escape=0
     # Menu loop until going back
     while escape==0: 
-        s_choice=raw_input("SETTINGS\nU - Set Player Username\nR - Reset Saved Checkpoints\nN - Enable/Disable \"Nerd\" Mode\nB - Back to Main Menu\nChoice: >")
+        s_choice=raw_input("SETTINGS\nU - Set Player Username\nR - Reset Saved Checkpoints\nN - Enable/Disable \"Nerd\" Mode\nI - Set Raspberry Pi IP\nB - Back to Main Menu\nChoice: >")
         # Username change
         if s_choice=='U' or s_choice=='u': 
             settings_list[0]=raw_input("Insert Username: >")
@@ -237,6 +279,11 @@ def settings(): # Allow the user to change settings like username and nerdmode
                 settings_list[1]=raw_input("Bad choice. Insert 1 to enable Nerd Mode, 0 to Disable. >")
             # nerdmode.txt update
             nerdmode_update() 
+        # Changing Raspberry Pi IP
+        elif s_choice=="i" or s_choice=="I":
+            settings_list[2]=raw_input("Insert Raspberry Pi IP: >")
+            # raspberry_ip.txt update
+            ip_update()
         # Back to main menu
         elif s_choice=='B' or s_choice=='b': 
             escape=1
@@ -244,7 +291,19 @@ def settings(): # Allow the user to change settings like username and nerdmode
             print "Invalid choice, try again."     
 def info(): # Prints info about version and creators
     print ("Version 0.0.1\nCreated by iMe\n")
-
+def sendemail(subject, message,login='treasurehuntingami@gmail.com',password='treasurehunting2014',smtpserver='smtp.gmail.com:587',from_addr='treasurehuntingami@gmail.com', to_addr_list=['treasurehuntingami@gmail.com'], cc_addr_list=[""]): # Function to send a suggestion!
+    header  = 'From: %s\n' % from_addr
+    header += 'To: %s\n' % ','.join(to_addr_list)
+    header += 'Cc: %s\n' % ','.join(cc_addr_list)
+    header += 'Subject: %s\n\n' % subject
+    message = header + message
+ 
+    server = smtplib.SMTP(smtpserver)
+    server.starttls()
+    server.login(login,password)
+    server.sendmail(from_addr, to_addr_list, message)
+    server.quit()
+    
 if __name__ == '__main__':
     # Setting main quit flag
     flag=0 
@@ -252,8 +311,10 @@ if __name__ == '__main__':
     f_user=open_file("username.txt")
     f_nerd=open_file("nerdmode.txt")
     f_check=open_file("checkpoints.txt")
+    f_ip=open_file("raspberry_ip.txt")
     # Copying settings from files to a list for better use and edit properties
-    settings_list=[f_user.read(),f_nerd.read()]
+    settings_list=[f_user.read(),f_nerd.read(),f_ip.read()]
+    starting_settings(settings_list)
     # Copying checkpoints to a dictionary for better use and edit properties
     checkpoints_dictionary=checkpoints_file_to_dict(f_check)
     # Menu loop until user wants to exit
