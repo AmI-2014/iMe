@@ -4,7 +4,23 @@ Created on 06/apr/2014
 @author: Andrea
 '''
 import smtplib
+from urllib import urlopen
+from math import radians, fabs, sin, cos, acos
+url="http://treasurehunting.altervista.org/server_checkpoints.txt"
+email='treasurehuntingami@gmail.com'
 
+def coordstr2rad(string): # Given a string of coordinates, returns a list with latitude and longitude in radians
+    temp=string.split(",")
+    coordinates=[]
+    coordinates.append(radians(float(temp[0])))
+    coordinates.append(radians(float(temp[1])))
+    return coordinates
+def distance_between_coordinates(str1,str2): # Given two strings of coordinates, returns the distance between them in meters
+    coord1=coordstr2rad(str1)
+    coord2=coordstr2rad(str2)
+    fi=fabs(coord1[1]-coord2[1])
+    P = acos((sin(coord1[0]) * sin(coord2[0]))+(cos(coord1[0]) * cos(coord2[0]) * cos(fi)))
+    return P*6372795.477598
 def open_file(name): # Quick function to open or create files used by main
     try:
         f_new=open(name,"r+")
@@ -36,6 +52,7 @@ def close_files(): # Quick function to close every file used by main
     f_nerd.close()
     f_check.close()
     f_ip.close()
+    f_server.close()
 def username_update(): # Updates username when changed by rewriting username.txt
     f_user.seek(0)
     f_user.truncate()
@@ -119,7 +136,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
                 if check_to_see!='0' and checkpoints_dictionary[check_to_see][0]=="GPS":
                     print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nCheckpoint Coordinates: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint proximity class: "+checkpoints_dictionary[check_to_see][2]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")    
                 elif check_to_see!='0':
-                    print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nRaspberry Pi IP: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")
+                    print ("Name: "+check_to_see+"\nCheckpoint Type: "+checkpoints_dictionary[check_to_see][0]+"\nBluetooth Key: "+checkpoints_dictionary[check_to_see][1]+"\nCheckpoint Trivia Hint (if present): "+checkpoints_dictionary[check_to_see][3]+"\n")
                 else:
                     print('Bad input.\n')
             except KeyError:
@@ -145,7 +162,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
             if new_check[0]=="GPS":
                 new_check.append(raw_input("Insert Checkpoint Coordinates: >"))
             else:
-                new_check.append(raw_input("Insert Raspberry Pi IP: >"))
+                new_check.append(raw_input("Insert Bluetooth Key: >"))
             if new_check[0]=="GPS":
                 new_check.append(raw_input("Insert Checkpoint Proximity Class (0: <10mt, 1: <25mt, 2: <100mt, 3: <1km, 4: <10km: >"))
             else:
@@ -191,7 +208,7 @@ def manage_checkpoints(): # Uses the checkpoints.txt file to manage them
                     if s_temp[0]!="":
                         c_temp[1]=s_temp[0]
                 else:
-                    s_temp[0]=raw_input("Insert new Raspberry Pi IP (leave blank to let it the same ("+c_temp[1]+"): >")
+                    s_temp[0]=raw_input("Insert new Bluetooth Key (leave blank to let it the same ("+c_temp[1]+"): >")
                     if s_temp[0]!="":
                         c_temp[1]=s_temp[0]
                 if c_temp[0]=="GPS":
@@ -291,7 +308,7 @@ def settings(): # Allow the user to change settings like username and nerdmode
             print "Invalid choice, try again."     
 def info(): # Prints info about version and creators
     print ("Version 0.0.1\nCreated by iMe\n")
-def sendemail(subject, message,login='treasurehuntingami@gmail.com',password='treasurehunting2014',smtpserver='smtp.gmail.com:587',from_addr='treasurehuntingami@gmail.com', to_addr_list=['treasurehuntingami@gmail.com'], cc_addr_list=[""]): # Function to send a suggestion!
+def sendemail(subject, message,login=email,password='treasurehunting2014',smtpserver='smtp.gmail.com:587',from_addr=email, to_addr_list=[email], cc_addr_list=[""]): # Function to send a suggestion!
     header  = 'From: %s\n' % from_addr
     header += 'To: %s\n' % ','.join(to_addr_list)
     header += 'Cc: %s\n' % ','.join(cc_addr_list)
@@ -317,6 +334,10 @@ if __name__ == '__main__':
     starting_settings(settings_list)
     # Copying checkpoints to a dictionary for better use and edit properties
     checkpoints_dictionary=checkpoints_file_to_dict(f_check)
+    # Downloading the server's checkpoints file, opening it and copying it to a dictionary
+    f_server=open_file("server_checkpoints.txt")
+    f_server.write(urlopen(url).read())
+    server_checkpoints_dictionary=checkpoints_file_to_dict(f_server)
     # Menu loop until user wants to exit
     while flag==0:
         # main_menu returns user's choice
