@@ -6,6 +6,8 @@ Created on 06/apr/2014
 import smtplib
 from urllib import urlopen
 from math import radians, fabs, sin, cos, acos
+from random import shuffle, choice
+from string import ascii_uppercase, digits
 url="http://treasurehunting.altervista.org/server_checkpoints.txt"
 email='treasurehuntingami@gmail.com'
 
@@ -15,7 +17,7 @@ def coordstr2rad(string): # Given a string of coordinates, returns a list with l
     coordinates.append(radians(float(temp[0])))
     coordinates.append(radians(float(temp[1])))
     return coordinates
-def distance_between_coordinates(str1,str2): # Given two strings of coordinates, returns the distance between them in meters
+def distance_between_coordinates(str1,str2): # Given two strings of coordinates in radians, returns the distance between them in meters
     coord1=coordstr2rad(str1)
     coord2=coordstr2rad(str2)
     fi=fabs(coord1[1]-coord2[1])
@@ -87,6 +89,14 @@ def checkpoints_dict_to_file(f_out,check_dict): # Copies checkpoints from a dict
         f_out.write('*'+key+'\n')
         for i in range(0,len(check_dict[key])):
             f_out.write(check_dict[key][i]+'\n')
+def dictionary_to_game_file(f_out,check_dict,game_mode,sequential):
+    f_out.seek(0)
+    f_out.truncate()
+    f_out.write(settings_list[0]+'\n'+game_mode+'\n'+sequential+'\n')
+    for key in check_dict:
+        f_out.write('*'+key+'\n')
+        for i in range(0,len(check_dict[key])):
+            f_out.write(check_dict[key][i]+'\n')
 def main_menu(): # Prints the main menu and returns the user choice
     return raw_input("MAIN MENU\nN - Create New Game\nP - Play a Game\nC - Manage Checkpoints\nS - Settings\nI - Info\nQ - Quit\nChoice: >")
 def new_game(): # Creation of a new Treasure Hunt, either fully randomized or not
@@ -108,9 +118,39 @@ def new_game(): # Creation of a new Treasure Hunt, either fully randomized or no
 def play_game(): # Start a new game using its ID
     pass
 def new_random_game():
-    pass
+    check_number=int(raw_input("Insert the number of checkpoints you'd like: >"))
+    game_mode=raw_input("Insert 1 for 'Guess final checkpoint' mode, 2 for normal mode: >")
+    while game_mode!='1' and game_mode!='2':
+        game_mode=raw_input("Bad input. Insert 1 for 'Guess final checkpoint' mode, 2 for normal mode: >")
+    sequential=raw_input("Has everyone to follow the same path (1) or follow a random one (2)? >")
+    while sequential!='1'and sequential!='2':
+        sequential=raw_input("Bad input. Has everyone to follow the same path (1) or follow a random one (2)? >")
+    max_range=int(raw_input("Insert max game range from your position (in meters): >"))
+    player_position=get_gps_position()
+    keys=server_checkpoints_dictionary.keys()
+    shuffle(keys)
+    game_checkpoints={}
+    for key in keys:
+        if check_number==0:
+            break
+        temp_coord=server_checkpoints_dictionary[key][1]
+        if distance_between_coordinates(temp_coord,player_position)<=max_range:
+            game_checkpoints[key]=server_checkpoints_dictionary[key]
+            check_number-=1
+    if check_number!=0:
+        print "There weren't enough checkpoints. Try again."
+    else:
+        random_string=[]
+        random_string.append("")
+        random_string[0]=''.join(choice(ascii_uppercase + digits) for _ in range(0,6))
+        game_file=open_file(random_string[0]+".txt")
+        dictionary_to_game_file(game_file,game_checkpoints,game_mode,sequential)
+        game_file.close()
+        print "Game created! Its code is: "+random_string[0]                 
 def new_normal_game():
     pass
+def get_gps_position(): # For now dummy function to return gps positioning
+    return "0.0,0.0"
 def manage_checkpoints(): # Uses the checkpoints.txt file to manage them 
     # Setting flag for settings menu loop until user wants to go back to main menu
     escape=0
@@ -336,28 +376,30 @@ if __name__ == '__main__':
     checkpoints_dictionary=checkpoints_file_to_dict(f_check)
     # Downloading the server's checkpoints file, opening it and copying it to a dictionary
     f_server=open_file("server_checkpoints.txt")
+    f_server.seek(0)
+    f_server.truncate()
     f_server.write(urlopen(url).read())
     server_checkpoints_dictionary=checkpoints_file_to_dict(f_server)
     # Menu loop until user wants to exit
     while flag==0:
         # main_menu returns user's choice
-        choice=main_menu()
-        if choice=='N' or choice=='n':
+        m_choice=main_menu()
+        if m_choice=='N' or m_choice=='n':
             # Calling function to start the creation module for a new game
             new_game()
-        elif choice=='P' or choice=='p':
+        elif m_choice=='P' or m_choice=='p':
             # Calling function to play an existing game
             play_game()
-        elif choice=='C' or choice=='c':    
+        elif m_choice=='C' or m_choice=='c':    
             # Calling function to manage checkpoints
             manage_checkpoints()
-        elif choice=='S' or choice=='s':    
+        elif m_choice=='S' or m_choice=='s':    
             # Calling function to edit settings
             settings()
-        elif choice=='I' or choice=='i':    
+        elif m_choice=='I' or m_choice=='i':    
             # Calling function to print app informations
             info()
-        elif choice=='Q' or choice=='q':  
+        elif m_choice=='Q' or m_choice=='q':  
             # Setting the escape flag to quit the app  
             flag=1
         else:   
