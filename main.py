@@ -127,15 +127,15 @@ def new_random_game():
         sequential=raw_input("Bad input. Has everyone to follow the same path (1) or follow a random one (2)? >")
     max_range=int(raw_input("Insert max game range from your position (in meters): >"))
     player_position=get_gps_position()
-    keys=server_checkpoints_dictionary.keys()
+    keys=server_dictionary.keys()
     shuffle(keys)
     game_checkpoints={}
     for key in keys:
         if check_number==0:
             break
-        temp_coord=server_checkpoints_dictionary[key][1]
+        temp_coord=server_dictionary[key][1]
         if distance_between_coordinates(temp_coord,player_position)<=max_range:
-            game_checkpoints[key]=server_checkpoints_dictionary[key]
+            game_checkpoints[key]=server_dictionary[key]
             check_number-=1
     if check_number!=0:
         print "There weren't enough checkpoints. Try again."
@@ -379,7 +379,10 @@ if __name__ == '__main__':
     f_server.seek(0)
     f_server.truncate()
     f_server.write(urlopen(url).read())
-    server_checkpoints_dictionary=checkpoints_file_to_dict(f_server)
+    # Don't know why, but if I copy the file onto a dictionary right away the file goes nuts, but if I close it and open it again no, so...
+    f_server.close()
+    f_server=open_file("server_checkpoints.txt")
+    server_dictionary=checkpoints_file_to_dict(f_server)
     # Menu loop until user wants to exit
     while flag==0:
         # main_menu returns user's choice
