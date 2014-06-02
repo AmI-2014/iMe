@@ -6,5 +6,8 @@ urlpatterns = [
     url(r'^PlayerUpdate/$', 'hello.views.player_update'),
     url(r'^CreateLobby/$', 'hello.views.create_lobby'),
     url(r'^JoinLobby/$', 'hello.views.join_lobby'),
-    url(r'^SearchForCheckpoints/$','hello.views.search_for_checkpoints')
+    url(r'^SearchForCheckpoints/$','hello.views.search_for_checkpoints'),
+    url(r'^GetCheckpoints/$', 'hello.views.get_checkpoints'),
+    url(r'^Ranking/$', 'hello.views.ranking')
 ]
+

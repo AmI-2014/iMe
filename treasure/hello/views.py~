@@ -19,8 +19,8 @@ def coordstr2rad(string):
 def distance_between_coordinates(str1,str2): 
     coord1=coordstr2rad(str1)
     coord2=coordstr2rad(str2)
-    fi=fabs(coord1[1]-coord2[1])
-    P = acos((sin(coord1[0]) * sin(coord2[0]))+(cos(coord1[0]) * cos(coord2[0]) * cos(fi)))
+    phi=fabs(coord1[1]-coord2[1])
+    P = acos((sin(coord1[0]) * sin(coord2[0]))+(cos(coord1[0]) * cos(coord2[0]) * cos(phi)))
     return P*6372795.477598
 
 #accepts POST requests using the name of the new player for the initialization, taken as POST parameter. Returns the player's ID
@@ -49,7 +49,7 @@ def create_lobby(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         player_id = request.POST.get('id') 
-        new_lobby = Lobby(lobby_name = name, max_range = 0, game_nrc='NULL')
+        new_lobby = Lobby(lobby_name = name, max_range = 0, game_nrc ='NULL', game_status = False)
         new_lobby.save()
         associated_player = Player.objects.get(id=player_id)
         if associated_player!=None:
@@ -63,8 +63,8 @@ def create_lobby(request):
 def join_lobby(request):
     #join an existing lobby. Accepts GET request to the server, which response is the existing lobbies
     if request.method == 'GET':
-		#if no json serialization will be required uncomment the following line and fix the return
-		#total_lobbies = Lobby.objects.all()
+	#if no json serialization will be required uncomment the following line and fix the return
+	#total_lobbies = Lobby.objects.all()
         parsed_total_lobby = serializers.serialize("json", Lobby.objects.all())
         return HttpResponse(parsed_total_lobby, mimetype='application/json')
 
@@ -78,13 +78,7 @@ def join_lobby(request):
         lobby.save()
         return HttpResponse('OK')
 
-@csrf_exempt
-def distance(request):
-    c1 = request.POST.get('point1')
-    c2 = request.POST.get('point2')
-    d=distance_between_coordinates(c1,c2)
-    return HttpResponse(d)
-
+#Accepts POST requests with the number of checkpoints, the range of play, the start coordinates and the lobby the creator belongs to as params. Returns the maximum number of players allowed for the created game.
 @csrf_exempt
 def search_for_checkpoints(request):
     if request.method == 'POST':
@@ -95,6 +89,7 @@ def search_for_checkpoints(request):
         lobby = Lobby.objects.get(lobby_name=lobby_n)
         string = str(num_check)+"-"+str(play_range)+"-"+start_coord
         lobby.game_nrc = string
+        lobby.save()
         possible_checkpoints = 0
 
         for e in Checkpoint.objects.all():
@@ -107,6 +102,65 @@ def search_for_checkpoints(request):
             
         return HttpResponse(max_players) 
             
+
+#Accepts POST requests with the plyayer's id as param. Returns the json serialized checkpoints randomly choosen from the database, with a margin of the 50% on the number of requested checkpoints.
+@csrf_exempt
+def get_checkpoints(request):
+    if request.method == 'POST':
+        player_id = request.POST.get('id')
+        lobby = Lobby.objects.get(players__pk = player_id)
+        game_params = lobby.game_nrc 
+        temp = game_params.split("-")
+        checkpoints_needed = floor(int(temp[0])*1.5)
+        checkpoints = Checkpoint.objects.order_by('?')[:checkpoints_needed] #if no json serialization it's needed
+        parsed_checkpoints = serializers.serialize("json", Checkpoint.objects.order_by('?')[:checkpoints_needed])
+        return HttpResponse(parsed_checkpoints, mimetype='application/json')
+
+
+#not properly working
+@csrf_exempt
+def ranking(request):
+    if request.method == 'POST':
+        player_id = request.POST.get('id')
+        cp_checked = request.POST.get('checked')
+        player2update = Player.objects.get(id=player_id)
+        player2update.rank = cp_checked
+        player2update.save()
+        lobby = Lobby.objects.get(players__pk=player_id)
+        lobby_players = lobby.players.all()
+        tot_players = []
+        for e in lobby_players:
+            player = Player.objects.get(id=e.id)
+            tot_players.append(player)
+
+        tot_players.sort(key = lambda x: -x.rank)
+        
+        
+        return HttpResponse(tot_players)
+
+
+#to be tested properly
+@csrf_exempt
+def game_status(request):
+    if request.method == 'POST':
+        player_id = request.POST.get('id')
+        lobby = Lobby.objects.get(players__pk=player_id)
+        return HttpResponse(lobby.game_status)
+
+#Accepts POST request using as parameters the player's id and a boolean variable which is True if the player has completed his checkpoints. The server return an 'ok'
+@csrf_exempt
+def end_game(request)
+    if request.method =='POST':
+        ended = request.POST.get('yes_no')
+        player_id = request.POST.get('id')
+        lobby = Lobby.objects.get(players__pk=player_id)
+        lobby.game_status = ended
+        return HttpResponse('OK')
+        
+
+    
+        
+        
             
             
         
