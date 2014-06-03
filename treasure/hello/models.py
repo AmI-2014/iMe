@@ -11,7 +11,7 @@ class Checkpoint(models.Model):
 
 class Player(models.Model):
     name = models.CharField(max_length=20)
-    rank = models.IntegerField(default=0)
+    checked = models.IntegerField(default=0)
     def __unicode__(self):
         return self.name
     class Meta:
@@ -23,7 +23,7 @@ class Lobby(models.Model):
     max_range = models.IntegerField(default=0)
     players = models.ManyToManyField(Player, related_name="related_lobby")
     game_nrc = models.CharField(max_length=50) #nrc stays for NumberOfCheckpoints-Range-startCoordinates
-    game_status = BooleanField()
+    game_status = models.BooleanField()
     def __unicode__(self):
         return self.lobby_name
     class Meta:
