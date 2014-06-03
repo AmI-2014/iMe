@@ -1,3 +1,5 @@
 iMe
 ===
-Mobile application for sustaining the Treasure Hunting project. 
+Mobile and web applications for the Treasure Hunting project.
+Mobile app developed in html5 and Ratchet.
+Web app developed with python/django and Google app engine.
