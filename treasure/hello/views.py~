@@ -2,6 +2,8 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from math import radians, fabs, sin, cos, acos, floor
 import operator
+import datetime
+from django.utils.timezone import utc
 from hello.models import Player, Checkpoint, Lobby
 from django.core import serializers
 from django.views.decorators.csrf import csrf_exempt
@@ -58,7 +60,8 @@ def create_lobby(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         player_id = request.POST.get('id') 
-        new_lobby = Lobby(lobby_name = name, max_range = 0, game_nrc ='NULL', game_status = False)
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        new_lobby = Lobby(lobby_name = name, game_nrcd ='NULL', game_status = False, game_start_date = now)
         new_lobby.save()
         associated_player = Player.objects.get(id=player_id)
         if associated_player!=None:
@@ -91,7 +94,8 @@ def join_lobby(request):
 
         return HttpResponse('OK')
 
-#Accepts POST requests with the number of checkpoints, the range of play, the start coordinates and the lobby the creator belongs to as params. Returns the maximum number of players allowed for the created game.
+
+#Accepts POST requests with the number of checkpoints, the range of play, the difficulty, the start coordinates and the lobby the creator belongs to as params. Returns the maximum number of players allowed for the created game.
 @csrf_exempt
 def search_for_checkpoints(request):
 
@@ -100,9 +104,10 @@ def search_for_checkpoints(request):
         num_check = int(request.POST.get('first'))
         play_range = float(request.POST.get('second'))
         start_coord = request.POST.get('third')
+        difficulty = request.POST.get('fourth')
         lobby = Lobby.objects.get(lobby_name=lobby_n)
-        string = str(num_check)+"-"+str(play_range)+"-"+start_coord
-        lobby.game_nrc = string
+        string = str(num_check)+"-"+str(play_range)+"-"+start_coord+"-"+str(difficulty)
+        lobby.game_nrcd = string
         lobby.save()
         possible_checkpoints = 0
 
@@ -112,20 +117,19 @@ def search_for_checkpoints(request):
             if meters <= play_range:
                 possible_checkpoints = possible_checkpoints+1
         
-        max_players = int(floor(possible_checkpoints/(num_check*1.5)))
-        lobby.game_status = False #if the lobby has already played a different game, eventually ended   
+        max_players = int(floor(possible_checkpoints/(num_check*1.5)))   
 
         return HttpResponse(max_players) 
             
 
-#Accepts POST requests with the plyayer's id as param. Returns the json serialized checkpoints randomly choosen from the database, with a margin of the 50% on the number of requested checkpoints.
+#Accepts POST requests with the player's id as param. Returns the json serialized checkpoints randomly choosen from the database, with a margin of the 50% on the number of requested checkpoints.
 @csrf_exempt
 def get_checkpoints(request):
 
     if request.method == 'POST':
         player_id = request.POST.get('id')
         lobby = Lobby.objects.get(players__pk = player_id)
-        game_params = lobby.game_nrc 
+        game_params = lobby.game_nrcd
         temp = game_params.split("-")
         checkpoints_needed = floor(int(temp[0])*1.5)
         checkpoints = Checkpoint.objects.order_by('?')[:checkpoints_needed] #if no json serialization it's needed
@@ -160,29 +164,44 @@ def ranking(request):
         return HttpResponse(simplejson.dumps(sorted_dd), content_type = 'application/json; charset = utf8')
 
 
-#Accepts POST request with the player's id. Returns the status of the game the player is associated with, as True if finished, False if still going
+#Accepts POST request with the player's id. Returns the status of the game the player is associated with, as True if in progress, False if ended or not even started.
 @csrf_exempt
 def game_status(request):
 
     if request.method == 'POST':
         player_id = request.POST.get('id')
         lobby = Lobby.objects.get(players__pk=player_id)
-
         return HttpResponse(lobby.game_status)
 
-
-#Accepts POST request using as parameters the player's id and a boolean variable which is True if the player has completed his checkpoints. The server return an 'ok'
+#Accepts POST requests using player's ID as param. Returns the time delta since the beginning of the game in the following format h:m:s.us
 @csrf_exempt
-def end_game(request):
+def check_time(request):
+    if request.method == 'POST':
+        player_id = request.POST.get('id')
+        lobby = Lobby.objects.get(players__pk=player_id)
+        now = datetime.datetime.utcnow().replace(tzinfo=utc)
+        delta = now - lobby.game_start_date
+        return HttpResponse(delta)
+        
+
+#Accepts POST request using as parameters the player's id and a boolean variable which is False if the player has completed his checkpoints. In this case every player finishing the game can use this function. On the other hand the same function called with True as parameter value should be a prerogative of the creator, which starts the game. The server returns an 'OK'
+@csrf_exempt
+def begin_finish(request):
 
     if request.method =='POST':
-        ended = request.POST.get('yes_no')
+        started = request.POST.get('yes_no')
         player_id = request.POST.get('id')
-        lobby = Lobby.objects.get(players__pk=player_id)#following lines not really necessary, but for clarity
-        lobby.game_status = ended
+        lobby = Lobby.objects.get(players__pk=player_id)
+        lobby.game_status = started
+        if started == True:    
+            now = datetime.datetime.utcnow().replace(tzinfo=utc)
+            lobby.game_start_date = now
+            
         lobby.save()
 
         return HttpResponse('OK')
+
+
         
 
     

@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^GetCheckpoints/$', 'hello.views.get_checkpoints'),
     url(r'^Ranking/$', 'hello.views.ranking'),
     url(r'^GameStatus/$', 'hello.views.game_status'),
-    url(r'^EndGame/$', 'hello.views.end_game')
+    url(r'^BeginFinish/$', 'hello.views.begin_finish'),
+    url(r'^CheckTime/$', 'hello.views.check_time')
 ]
 
