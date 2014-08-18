@@ -1,0 +1,68 @@
+@charset "utf-8";
+/* CSS Document */
+@import url(http://fonts.googleapis.com/css?family=Signika+Negative:400,600,700);
+@import url(http://fonts.googleapis.com/css?family=Poiret+One);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+
+
+body		{
+		    background: #515454; 
+			margin: 0% 0% 0% 0%; /*grandezza schermo*/
+			padding: 0% 0% 0% 0%;
+			text-align:center;
+			}
+			
+#header		{
+			padding: 0% 15% 0% 15%;
+	        margin: 0 0 0 0;
+			width: auto;
+			height:auto;
+			font-family: 'Signika Negative', sans-serif;
+			font-size:24px;
+			color:#FFFFFF;
+			}
+/*#menu		{
+			margin: 0% 18% 0% 18%;
+			text-align:left;
+			width: auto;
+			height:auto;
+		    font-family: 'Syncopate', cursive;
+			position:fixed;
+			top: 5%;
+			}*/
+#colonna	{
+			margin: 0% 15% 0% 15%;
+			text-align:center;
+			width: auto;
+			height:auto;
+			font-family: 'Open Sans Condensed', sans-serif;
+			font-size:20px;
+			}
+#div1		{
+			margin: 0 0 0 0;
+			background-color: #2A8985;
+			width: auto;
+			height:auto;
+			padding:5% 10% 5% 10%;
+			text-align:center;
+			color:#FFFFFF;
+			}
+#div2		{
+			margin: 0 0 0 0;
+			background-color: #E5F368; /* è preceduto da un livello nelle altre pagine presenti negli altri CSS*/
+			width: auto;
+			height:auto;
+			padding:5% 10% 5% 10%;
+			border-radius: 0px 0px 32px 32px;
+			text-align:justify;
+			}
+#div3		{
+			margin: 0 0 0 0;
+		    background-color: #FD7F35;
+			width: auto;
+			height:auto;
+			padding:5% 10% 5% 10%;
+			color:#FFFFFF;
+			text-align:justify;
+			border-radius: 0px 0px 32px 32px;
+			}
