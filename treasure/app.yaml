@@ -1,4 +1,4 @@
-application: hello-django-app-engine
+application: starry-gravity-581
 version: 1
 runtime: python27
 api_version: 1
@@ -10,4 +10,4 @@ handlers:
 
 libraries:
 - name: django
-  version: 1.5
+  version: '1.5.8'

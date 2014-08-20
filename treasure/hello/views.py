@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render   
 from math import radians, fabs, sin, cos, acos, floor
 import operator
 import datetime
@@ -29,16 +29,21 @@ def distance_between_coordinates(str1,str2):
 
     return P*6372795.477598
 
-#accepts POST requests using the name of the new player for the initialization, taken as POST parameter. Returns the player's ID
+#accepts POST requests using the name of the new player for the initialization, taken as POST parameter. Returns 'NOK' if name already exists, the player's id otherwise.
 @csrf_exempt
 def player_initialization(request):
 
     if request.method == 'POST':
         new_name = request.POST.get('name')
-        new_player = Player(name = new_name, checked = 0)
-        new_player.save()
 
-        return HttpResponse(new_player.id)
+        if Player.objects.filter(name = new_name).exists() == True:
+            return HttpResponse("NOK")
+
+        else:
+            new_player = Player(name = new_name, checked = 0)
+            new_player.save()
+
+            return HttpResponse(new_player.id)
 
 #accepts POST requests using the new name for the player for updating it, taken as POST parameter. Returns 'ok'
 @csrf_exempt
@@ -53,20 +58,24 @@ def player_update(request):
 
         return HttpResponse('OK')
 
-#Accepts POST requests using the name of the lobby to create a new one and the player's ID to make him join the lobby itself. Both the lobby's name and the player's ID are taken as POST parameters. Obviously the player must already exist. Returns 'ok'. Check for existing lobby still missing. [exists()]
+#Accepts POST requests using the name of the lobby to create a new one and the player's ID to make him join the lobby itself. Both the lobby's name and the player's ID are taken as POST parameters. Obviously the player must already exist. Returns 'NOK' is lobby's name already exists, 'OK' otherwise. Check for existing lobby still missing. [exists()]
 @csrf_exempt
 def create_lobby(request):
 
     if request.method == 'POST':
         name = request.POST.get('name')
         player_id = request.POST.get('id') 
-        now = datetime.datetime.utcnow().replace(tzinfo=utc)
-        new_lobby = Lobby(lobby_name = name, game_nrcd ='NULL', game_status = False, game_start_date = now)
-        new_lobby.save()
-        associated_player = Player.objects.get(id=player_id)
-        if associated_player!=None:
-            new_lobby.players.add(associated_player) 
+        if Lobby.objects.filter(lobby_name = name).exists() == True:
+            return HttpResponse("NOK")
+        
+        else: 
+            now = datetime.datetime.utcnow().replace(tzinfo=utc)
+            new_lobby = Lobby(lobby_name = name, game_nrcd ='NULL', game_status = False, game_start_date = now)
             new_lobby.save()
+            associated_player = Player.objects.get(id=player_id)
+            if associated_player!=None:
+                new_lobby.players.add(associated_player) 
+                new_lobby.save()
 
             return HttpResponse('OK')
 
@@ -78,9 +87,10 @@ def join_lobby(request):
     #join an existing lobby. Accepts GET request to the server, which response is the existing lobbies
     if request.method == 'GET':
 	#if no json serialization will be required uncomment the following line and fix the return
-	#total_lobbies = Lobby.objects.all()
+	total_lobbies = Lobby.objects.all()
+        #print "ciao"
         parsed_total_lobby = serializers.serialize("json", Lobby.objects.all())
-
+        #return HttpResponse("ciao")
         return HttpResponse(parsed_total_lobby, mimetype='application/json')
 
     #actual join-existing-lobby function. Accepts POST requests with lobby's name and player ID as params
