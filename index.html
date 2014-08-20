@@ -1,15 +1,5 @@
 <!DOCTYPE html>
 
-<?php
-    include("/nivo-slider/nivoslider.php");
-    $nivo=new NivoSlider('nivo-slider/nivoslider',618,236);     // base path is same directory
- 
-    //$nivo->add_slide(ImagePath,URL,Caption);
-    $nivo->add_slide('nivo-slider/imgs/poli.jpg','','');
-    $nivo->add_slide('nivo-slider/imgs/poli2.jpg','','');  
-    $nivo->add_slide('nivo-slider/imgs/poli4.jpg','','');
-    $nivo->add_slide('nivo-slider/imgs/logoteam.jpg','','');
-?>
 <html>
 
 <head>
@@ -21,7 +11,7 @@
 <link type="text/css" href="style.css" rel="stylesheet" />
 <link href="menu_source/stylesmenù.css" rel="stylesheet" type="text/css">
 <link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
-<?php $nivo->render_includes(); ?>
+
 
 </head>
 
@@ -34,10 +24,9 @@
 
 	<div id='cssmenu'>
 		<ul>
-   			<li class='active'><a href='index.php'><span>Home</span></a></li>
-   			<li><a href='video.php'><span>Video</span></a></li>
-             <li><a href='documentation.php'><span>Documentation</span></a></li>
-   			<li><a href='aboutus.php'><span>About Us</span></a></li>
+   			<li class='active'><a href='index.html'><span>Home</span></a></li>
+             <li><a href='documentation.html'><span>Documentation</span></a></li>
+   			<li><a href='aboutus.html'><span>About Us</span></a></li>
    			<!--<li class='last'><a href='#'><span>Pippo</span></a></li> -->
 		</ul>
 	</div>
@@ -45,8 +34,13 @@
     <p> Improvements in technology have in the latest years lead to a new vision of gaming which introduce the player in incredible scenarios, where computer graphics and artificial intelligence take the user in another dimension, from time to time more realistic and enjoyable.</p>
 
 <p><em>Our purpose anyway is different, our clue is to bring software and technology in the scenarios of the real world and not vice-versa, and to exploit the greatest GPU available in the market: the users' brain!</em> </p></em> </p>
-<p style="font-family: 'Poiret One', cursive;"><strong><label style="color:#FFFFFF"> <font size="9"> "Are you ready for the quest!?"</font></label></strong></p>  
-<?php $nivo->render_slides() ?>
+<p style="font-family: 'Poiret One', cursive;"><strong><label style="color:#FFFFFF"> <font size="9"> "Are you ready for the quest!?"</font></label></strong></p> 
+
+<object width="600" height="350" data="https://www.youtube.com/v/pSu3vVCXZd0" type="application/x-shockwave-flash"><param name="src" value="http://www.youtube.com/v/pSu3vVCXZd0" /></object>
+
+
+
+
     </div>
     
  <div id="div3" class="outer">
@@ -62,7 +56,7 @@
 <br>- Slowing down clues in RT
 <br>- Taking the time to balance the game
 
-<br> <i>Others features and videos are coming. We are working! </i>
+
 
 
 </p>

@@ -1,15 +1,5 @@
 <!DOCTYPE html>
-<?php
-    include("/nivo-slider/nivoslider.php");
-    $nivo=new NivoSlider('nivo-slider/nivoslider',618,236);     // base path is same directory
- 
-    //$nivo->add_slide(ImagePath,URL,Caption);
-    $nivo->add_slide('nivo-slider/imgs/poli.jpg','','');
-    $nivo->add_slide('nivo-slider/imgs/poli2.jpg','','');  
-    $nivo->add_slide('nivo-slider/imgs/poli4.jpg','','');
-    $nivo->add_slide('nivo-slider/imgs/portal.jpg','','');
-     
-?>
+
 <html>
 
 <head>
@@ -17,7 +7,6 @@
 <title>Treasure Hunting</title>
 <link type="text/css" href="style.css" rel="stylesheet" />
 <link href="menu_source/stylesmenù.css" rel="stylesheet" type="text/css">
-<?php $nivo->render_includes(); ?>
 </head>
 
 <body>
@@ -40,10 +29,9 @@
 <div id="colonna">
 	<div id='cssmenu'>
 		<ul>
-   			<li><a href='index.php'><span>Home</span></a></li>
-   			<li><a href='video.php'><span>Video</span></a></li>
-            <li class='active'><a href='documentation.php'></span>Documentation</span></a></li>
-   			<li><a href='aboutus.php'><span>About Us</span></a></li>
+   			<li><a href='index.html'><span>Home</span></a></li>
+            <li class='active'><a href='documentation.html'></span>Documentation</span></a></li>
+   			<li><a href='aboutus.html'><span>About Us</span></a></li>
             
 		</ul>
 	</div>
@@ -74,8 +62,8 @@ The second one is the server, localized on a PC, that communicates with a SQL da
 <p>
 
 <!-- IMMAGINE DA SISTEMARE E INSEREMENTO VIDEO YOUTUBE
-<img src="immagini\structure.png" ></p>
- <!--<iframe width="560" height="315" src="//www.youtube.com/embed/oftbLiCnBtE" frameborder="0" allowfullscreen></iframe>-->
+<img src="immagini\structure.png" ></p> -->
+
 
 <p><center>iMe project developers:</center></p>
 
