@@ -80,7 +80,6 @@ def create_lobby(request):
             return HttpResponse('OK')
 
 
-#Unique name of lobby is given
 @csrf_exempt   
 def join_lobby(request):
 
