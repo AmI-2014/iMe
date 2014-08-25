@@ -94,6 +94,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -117,6 +118,7 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'hello',
+    'corsheaders',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -147,4 +149,22 @@ INSTALLED_APPS = (
 #        },
 #    }
 #}
+CORS_ORIGIN_ALLOW_ALL = True
 
+CORS_ALLOW_HEADERS = (
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken'
+)
+
+CORS_ALLOW_METHODS = (
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+)

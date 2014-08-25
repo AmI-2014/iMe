@@ -69,13 +69,26 @@ def create_lobby(request):
             return HttpResponse("NOK")
         
         else: 
-            now = datetime.datetime.utcnow().replace(tzinfo=utc)
-            new_lobby = Lobby(lobby_name = name, game_nrcd ='NULL', game_status = False, game_start_date = now)
-            new_lobby.save()
-            associated_player = Player.objects.get(id=player_id)
-            if associated_player!=None:
-                new_lobby.players.add(associated_player) 
+            if Lobby.objects.filter(players__pk = player_id).exists() == True:
+                old_lobby = Lobby.objects.get(players__pk = player_id)
+                player = Player.objects.get(id = player_id)
+                old_lobby.players.remove(player)
+                old_lobby.save()
+                now = datetime.datetime.utcnow().replace(tzinfo=utc)
+                new_lobby = Lobby(lobby_name = name, game_nrcd ='NULL', game_status = False, game_start_date = now)
                 new_lobby.save()
+                associated_player = player
+                new_lobby.players.add(player) 
+                new_lobby.save()     
+            else:
+                player = Player.objects.get(id = player_id)
+                now = datetime.datetime.utcnow().replace(tzinfo=utc)
+                new_lobby = Lobby(lobby_name = name, game_nrcd ='NULL', game_status = False, game_start_date = now)
+                new_lobby.save()
+                associated_player = player
+                new_lobby.players.add(player) 
+                new_lobby.save()                
+
 
             return HttpResponse('OK')
 
@@ -86,20 +99,31 @@ def join_lobby(request):
     #join an existing lobby. Accepts GET request to the server, which response is the existing lobbies
     if request.method == 'GET':
 	#if no json serialization will be required uncomment the following line and fix the return
-	total_lobbies = Lobby.objects.all()
+	#total_lobbies = Lobby.objects.all()
         #print "ciao"
         parsed_total_lobby = serializers.serialize("json", Lobby.objects.all())
         #return HttpResponse("ciao")
+
         return HttpResponse(parsed_total_lobby, mimetype='application/json')
 
     #actual join-existing-lobby function. Accepts POST requests with lobby's name and player ID as params
     elif request.method == 'POST':
-        l_name = request.POST.get('name')
+        new_lobby = request.POST.get('name')
         player_id = request.POST.get('id')
-        lobby = Lobby.objects.get(lobby_name=l_name)
-        player = Player.objects.get(id=player_id)
-        lobby.players.add(player)
-        lobby.save()
+        player = Player.objects.get(id = player_id)
+
+        if Lobby.objects.filter(players__pk = player_id).exists() == True:
+            old_lobby = Lobby.objects.get(players__pk = player_id)
+            old_lobby.players.remove(player)
+            old_lobby.save()
+            lobby = Lobby.objects.get(lobby_name=new_lobby)
+            lobby.players.add(player)
+            lobby.save()
+        
+        else:
+            lobby = Lobby.objects.get(lobby_name=new_lobby)
+            lobby.players.add(player)
+            lobby.save()            
 
         return HttpResponse('OK')
 
@@ -209,6 +233,8 @@ def begin_finish(request):
         lobby.save()
 
         return HttpResponse('OK')
+
+
 
 
         
