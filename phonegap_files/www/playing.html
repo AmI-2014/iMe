@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Playing</title>
+    <!-- Sets initial viewport load and disables zooming  -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Include the compiled Ratchet CSS -->
+    <link href="css/ratchet.css" rel="stylesheet">
+    <link href="css/ratchet-theme-ios.css" rel="stylesheet">
+    <!-- Include the compiled Ratchet JS -->
+    <script src="myscripts.js"></script>
+    <script src="js/jquery-2.1.1.js"></script>
+  </head>
+  	<body>
+  		<div class="content">
+				<script>
+					getCheckpoints();
+					window.setInterval("getCoords()", 2000);
+					window.setInterval("countDown()",1000);
+					window.setInterval("ranking()",1000);
+					window.setInterval("hasGameEnded()",1000);
+					window.setInterval("evaluateDistance()",2000);
+					window.setInterval("areYouThere()",2000);
+				</script>
+                <br><br><br><br>
+        	<div id="gameInfos"><center><h2>Checkpoints found:</h2><br><h3>Time left:</h3></center><br></div>
+    		<div id="game"><center><h2>Next Checkpoint:</h2><br><br><h4>Distance from checkpoint: </h4></center><br></div>
+            <div id="malus"><center><h2>Malus: None!</h2><br></center></div>
+            <script>window.setInterval("printInfos()",1000);
+            window.setInterval("printCheckpoint()",2000);
+            window.setInterval("revealLetters()",5000);
+            window.setInterval("findMaluses()", 180000);</script>
+    	</div>
+	</body>
+</html>

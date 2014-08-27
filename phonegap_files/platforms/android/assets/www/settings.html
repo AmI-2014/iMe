@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>Settings</title>
+    <!-- Sets initial viewport load and disables zooming  -->
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Include the compiled Ratchet CSS -->
+    <link href="css/ratchet.css" rel="stylesheet" type="text/css">
+    <link href="css/ratchet-theme-android.css" rel="stylesheet">
+    <!-- Include the compiled Ratchet JS -->
+    <script src="myscripts.js"></script>
+    <script src="js/jquery-2.1.1.js"></script>
+  </head>
+      <body>
+      	<div class="content">
+        	<br><br><br>
+            <div id="yourUsernameIs"></div>
+            <form action="/" id="sendUsername">
+        	<input type="text" name="toSend" placeholder="Set Username">
+            <input type="submit" value="Select Username!" class="btn btn-positive btn-block">
+            </form>
+        	<a href="index.html" data-transition="slide-out"><button class="btn btn-negative btn-block"><span class="icon icon-left"></span> Back to Main Menu</button></a>
+			<script>
+			if (window.localStorage.getItem("PlayerUsername")==null) document.getElementById("yourUsernameIs").innerHTML="<h6><center>You have no username yet!</center></h6>";
+			else document.getElementById("yourUsernameIs").innerHTML="<h6><center>Your username is "+window.localStorage.getItem("PlayerUsername")+"</center></h6>";
+			$("#sendUsername").submit(function(event) {
+				event.preventDefault();
+				var $form = $(this), usernameToSend=$form.find("input[name='toSend']").val();
+				if (usernameToSend=="") alert("Well, at least write something!");
+				else playerInit(usernameToSend); 
+				})
+			</script>
+        </div>
+      </body>
+  </html>
