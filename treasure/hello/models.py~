@@ -24,7 +24,6 @@ class Lobby(models.Model):
     game_nrcd = models.CharField(max_length=50) #nrcd stays for NumberOfCheckpoints-Range-startCoordinates-Difficulty
     game_status = models.BooleanField()
     game_start_date = models.DateTimeField()
-    checkpoints_under_range = models.ManyToManyField(Checkpoint, related_name="related_checkpoint")
     def __unicode__(self):
         return self.lobby_name
     class Meta:
