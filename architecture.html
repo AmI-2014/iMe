@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link type="text/css" href="style.css" rel="stylesheet" />
+<link href="menu_source/stylesmenù.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<style>
+
+#div1	{
+         color:#000000;
+         background:url(immagini/cartadoc.jpg);
+		 border-radius: 0px 0px 32px 32px;
+		 text-align:justify;
+		 
+		 }
+		 
+
+</style>
+
+<div id="header">
+		<img src="immagini/logoscritta2.png" />
+</div>
+<div id="colonna">
+	<div id='cssmenu'>
+		<ul>
+   			<li><a href='index.html'><span>Home</span></a></li>
+            <li><a href='features.html'><span>Features</span></a></li>
+            <li class='active'><a href='documentation.html'></span>Documentation</span></a></li>
+   			<li><a href='download.html'><span>Download</span></a></li>
+            <li><a href='aboutus.html'><span>About Us</span></a></li>
+          
+		</ul>
+	</div>
+    <div id="div1">
+      	<div id="div1" style="padding-bottom: 0%;">
+        
+<p><b>MySQL Database</b></p>
+
+<p>The database structure is build up by means of Django models. Three main models are:
+<br>- Checkpoint
+<br>- Player
+<br>- Lobby
+
+<p>Every model is a class with its properties:</p>
+
+                                                          
+Checkpoint:                      
+
+<li>Coordinates</li>
+<li>Proximity                                          (refers to the number of meters at which the Player has to approach to the checkpoint to get it checked by the application)</li>
+<li>Name</li>
+<br>
+Player:
+<li> Checked 
+                          (refers to the number of checkpoints the players has checked during the game)</li>
+<li>Name</li>                          
+<br>
+<p>For both Checkpoint and Player model is also assigned, by default, an incremental index which is the primary key. Errors, such as a single name for two Players, are managed downstream at gameserver's level.</p>
+
+
+Lobby:                        
+                          
+<li>Lobby name</li>
+<li>Players</li>
+<li>Game NRCD</li>
+<li>Game status</li>
+<li>Game start date and time</li>
+                                  
+<p>For the Lobby model the primary key is the Lobby's name. Players is a Many-to-many relationship with the Player model. Game NRCD stays for the Number of checkpoints, Range of play, start Coordinates and Difficulty, which are parameters of the game to be choosen. Game status is a boolean variable which is True when the game is started but not finished, False otherwise. Game start date and time is trivial. </p>
+
+
+<p><b>GAMESERVER</b>
+
+:Developed in python/django, is responsible to the management of the database queries in order to provide the necessary data to the mobile application and thus, to send and retrieve informations with the latter. Follows a subset of the REST API, for the full list and further informations visit our GitHub page. </p>
+
+<li>POST PlayerInit/
+Creation of a new player, using the username as parameter.
+
+<li>POST PlayerUpdate/
+Update of the player's name, using the new username and the id as params.
+
+<li>POST CreateLobby/
+Create and enter a new Lobby, using new Lobby's name and Player's id as params.
+
+<li>GET JoinLobby/ 
+Scroll existing Lobbies
+
+<li>POST JoinLobby/ 
+Join existing Lobby, using Lobby's name and Player's id.
+
+<li>POST SearchForCheckpoints/
+Create a new game, using as params: the number of checkpoints, the play range, start coordinates, the difficulty and the lobby the player belongs to.
+
+<li>POST GetCheckpoints/
+Get checkpoints associated with the previous research, using as param the Player's id.
+
+<li>POST Ranking/
+Obtain the ranking of the Players in the actual game, using as params the Player's id and the number of checkpoints comlpeted.
+
+
+<p><b>APPLICATION</b> :A first draft of the application was written in Python, but the absence of a GUI was something too bad for the application itself. Kivy would've been a solution, but it was not easy to implement at all.
+Then, PhoneGap seemed to be the best solution, and it was. After countless tries to install it, we finally succeeded. </p>
+
+<p>The application is written in HTML5, CSS and JavaScript. The graphical part is made with Ratchet thanks to their CSS files, and the development of the JavaScript functions has been helped by JQuery. </p>
+
+<p>Most of the pages of the applications are made to create the lobby where the game is hosted and to save each user identifiers on the server. For example, the Settings page is used to set the player's username. This is achieved via a POST request to the GameServer. The application then proceedes to save in local the player's username and it's id. This is achieved thanks to DOM's LocalStorage method. </p>
+
+<p>In a playing group, one player has to create the lobby, while the other players have to join the so-created lobby. Hence there's a Create Lobby page, and a Join Lobby page. The creator sends his coordinates to the server, along with how many checkpoints for player are needed to win the game, and how big should the range of the game be.
+Everything is again achieved thanks to POST requests. The creator has then the opportunity to start the game as soon as everyone is in the lobby.</p>
+
+<p>The game rules are easy: there is a time limit set to 10 minutes and a certain number of checkpoints to achieve: the group has to find them before the time ends. Each time you are near to your checkpoint, another one is set. Checkpoints' names are not given that easily: one letter appears every 5 seconds, so it is crucial to guess where do you need to head to as soon as possible. </p>
+
+<p>The playing page is composed by many functions called repeatedly. This is easily done thanks to JavaScript's easy usage of asynchrounous functions. The application continues to get the player's GPS coordinates, to calculate the distance between the player and the next checkpoint, to print the riddle for the next checkpoint, to find if the player is going too well (and in this case he needs to be stopped, thanks to some maluses), to ask the server if the game is ended because someone has found the last checkpoint, excetera. </p>
+
+<p>The whole "intelligent" part is set in the application itself, as it controls if someone needs to be slowed down. The game is playing with you, or better, against you. It can change your checkpoint while you are rushing to it, it can make you stand still for some time, or it can simply reduce your score. </p>
+
+<p>Last but not least, the application is still in an early stage, as it lacks of beauty and aims to semplicity of usage and efficiency. If we will continue to develop this project (and we all think we will), there will be some great improvements, for example automatic retrieve of checkpoints from Google Maps or Foursquare.
+
+ </p>
+    </div>
+  
+</div>
+</body>
+</html>

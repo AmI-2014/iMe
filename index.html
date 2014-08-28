@@ -1,78 +1,138 @@
 <!DOCTYPE html>
+
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=640" />
 
-    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
-    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+<head>
 
-    <script type="text/javascript" src="javascripts/modernizr.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $('#main_content').headsmart()
-      })
-    </script>
-    <title>iMe by AmI-2014</title>
-  </head>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,700' rel='stylesheet' type='text/css'>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Treasure Hunting</title>
+<link type="text/css" href="style.css" rel="stylesheet" />
+<link href="menu_source/stylesmenù.css" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
+<link type="text/css" href="css_slider.css" rel="stylesheet" />
+</head>
 
-  <body>
-    <a id="forkme_banner" href="https://github.com/AmI-2014/iMe">View on GitHub</a>
-    <div class="shell">
-
-      <header>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <h1>iMe</h1>
-            <h2>Treasure Hunting</h2>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
-      </header>
-
-      <section id="downloads">
-        <span class="inner">
-          <a href="https://github.com/AmI-2014/iMe/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/AmI-2014/iMe/tarball/master" class="tgz"><em>download</em> .TGZ</a>
-        </span>
-      </section>
+<body>
+  <span id="sl_play" class="sl_command">&nbsp;</span>
+  <span id="sl_pause" class="sl_command">&nbsp;</span>
+  <span id="sl_i1" class="sl_command sl_i">&nbsp;</span>
+  <span id="sl_i2" class="sl_command sl_i">&nbsp;</span>
+  <span id="sl_i3" class="sl_command sl_i">&nbsp;</span>
+  <span id="sl_i4" class="sl_command sl_i">&nbsp;</span>
 
 
-      <span class="banner-fix"></span>
+<div id="header">
+<img src="immagini/logoscritta2.png" />
 
+</div>
 
-      <section id="main_content">
-        <p>Improvements in technology have in the latest years lead to a new vision of gaming which introduce the player in incredible scenarios, where computer graphics and artificial intelligence take the user in another dimension, from time to time more realistic and enjoyable.</p>
+<div id="colonna">
 
-<p><em>Our purpose anyway is different, our clue is to bring software and technology in the scenarios of the real world and not vice-versa, and to exploit the greatest GPU available in the market: the users' brain!</em> </p>
+	<div id='cssmenu'>
+		<ul>
+   			<li class='active'><a href='index.html'><span>Home</span></a></li>
+            <li><a href='features.html'><span>Features</span></a></li>
+            <li><a href='documentation.html'><span>Documentation</span></a></li>
+            <li><a href='download.html'><span>Download</span></a></li>
+   			<li><a href='aboutus.html'><span>About Us</span></a></li>
+        </ul>
+	</div>
+    
+	<div id="div1" class="outer">
+ 
+    
+    <p> Improvements in technology have in the latest years lead to a new vision of gaming which introduce the player in incredible scenarios,        where computer graphics and artificial intelligence take the user in another dimension, from time to time more realistic and enjoyable.    <em>Our purpose anyway is different, our clue is to bring software and technology in the scenarios of the real world and not        vice-versa, and to exploit the greatest GPU available in the market: the users' brain!</em></p>
+    
+       <section id="slideshow">
+  
+    <a class="commands prev commands1" href="#sl_i4" title="Go to last slide">&lt;</a>
+    <a class="commands next commands1" href="#sl_i2" title="Go to 2nd slide">&gt;</a>
+    <a class="commands prev commands2" href="#sl_i1" title="Go to 1rst slide">&lt;</a>
+    <a class="commands next commands2" href="#sl_i3" title="Go to 3rd slide">&gt;</a>
+    <a class="commands prev commands3" href="#sl_i2" title="Go to 2nd slide">&lt;</a>
+    <a class="commands next commands3" href="#sl_i4" title="Go to 4th slide">&gt;</a>
+    <a class="commands prev commands4" href="#sl_i3" title="Go to 3rd slide">&lt;</a>
+    <a class="commands next commands4" href="#sl_i1" title="Go to first slide">&gt;</a>
+    
+    <a class="play_commands pause" href="#sl_pause" title="Maintain paused">Pause</a>
+    <a class="play_commands play" href="#sl_play" title="Play the animation">Play</a>
+    
+    <div class="container">
+      <div class="c_slider"></div>
+      <div class="slider">
+        <figure>
+          <img src="immagini/poli.jpg" alt="" width="640" height="310" />
+          
+        </figure><!--
+        --><figure>
+          <img src="immagini/poli2.jpg" alt="" width="640" height="310" />
+         
+        </figure><!--
+        --><figure>
+          <img src="immagini/poli4.jpg" alt="" width="640" height="310" />
+         
+        </figure><!--
+        --><figure>
+          <img src="immagini/logoteam.jpg" alt="" width="640" height="310" />
+          
+        </figure>
+      </div>
+    </div>
+    
+    <span id="timeline"></span>
+    
+    <ul class="dots_commands"><!--
+      --><li><a title="Show slide 1" href="#sl_i1">Slide 1</a></li><!--
+      --><li><a title="Show slide 2" href="#sl_i2">Slide 2</a></li><!--
+      --><li><a title="Show slide 3" href="#sl_i3">Slide 3</a></li><!--
+      --><li><a title="Show slide 4" href="#sl_i4">Slide 4</a></li>
+    </ul>
+    
+    </section>
 
-<p>Mainly the game consists in a treasure hunt controlled by a central computer which works as creator of the paths and clues to solve in order to find the treasure and win the match, but don't worry, you're always under control! In fact the central computer will communicate to you all the needed informations through an application on your mobile phone, from which you'll be able to set checkpoints, paths, and locations for outdoor gaming. Anyway this doesn't end here! If you're nerd and proud of it, by using our ready-to-use hardware (a set of sensors and Raspberry PI) and adding a pair more settings, even indoor gaming will not be a limit.</p>
+<!--<object width="600" height="350" data="https://www.youtube.com/v/pSu3vVCXZd0" type="application/x-shockwave-flash"><param name="src" value="http://www.youtube.com/v/pSu3vVCXZd0" /></object> -->
 
-<p><strong>Get ready for the quest!</strong></p>
+<p style="font-family: 'Raleway', sans-serif;"><strong><label style="color:#FFFFFF"> <font size="9"> Are you ready for the quest!?</font></label></strong></p> 
 
-<p>iMe project developers:</p>
-
-<p><a href="https://github.com/AndreaBarbasso">Andrea Barbasso</a> - <a href="https://github.com/Bisto92">Andrea Bistolfi</a> - <a href="https://github.com/philipjk">Filippo Galli</a></p>
-      </section>
-
-      <footer>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <p>this project by <a href="https://github.com/AmI-2014">AmI-2014</a> can be found on <a href="https://github.com/AmI-2014/iMe">GitHub</a></p>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
-        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
-        <span class="octocat"></span>
-      </footer>
 
     </div>
+  
+ <div id="div3" class="outer">
+   <!--   <section id="div3" class="inner"> -->
+        
 
-    
-  </body>
+
+<p>Mainly the game consists in a treasure hunting game controlled by a
+mobile application, which relies on a server for stuff like the
+management of checkpoints, the ranking of players, the creation of
+lobbies and more. Obviously, being fundamentally a game, the goal is
+to win, and this is possible reaching all the checkpoints that will be
+given to you after solving riddles and clues against your friends and
+the artificial intelligence located in the app.
+The innovation brought to you by the use of our application instead of
+practicing a traditional treasure hunt lays and is strictly bound to
+the concept of smart city, in which we all already live, since the
+possibility to track our routes and walks and travels through GPS also
+allows you to reach checkpoints and, hopefully, the treasure!</p>
+
+
+  <p><center>iMe project developers:</center></p>
+
+<p style="font-family:'Poiret One', cursive"> <font size="5px"><label style="color:#FFFFFF"><center><a href="https://github.com/AndreaBarbasso">Andrea Barbasso</a> <a href="https://github.com/Bisto92">Andrea Bistolfi</a>  <a href="https://github.com/philipjk">Filippo Galli</a></label></center> </font></p>
+   
+  </div>
+
+
+     <div id="footer">
+    &copy 2014 - iMe Ambient Intelligence - Politecnico di Torino - All rights reserved
+  </div> 
+       
+</div>
+
+</div>
+ 
+</body>
+
+
 </html>

@@ -1,0 +1,94 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url(http://fonts.googleapis.com/css?family=Poiret+One);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+
+
+
+
+#body		{
+		    background: #FAFAF6; 
+			margin: 0% 0% 0% 0%; /*grandezza schermo*/
+			padding: 0% 0% 0% 0%;
+			text-align:center;
+			}
+			
+#header		{
+			padding: 0% 15% 0% 15%;
+	        margin: 0 0 0 0;
+			width: auto;
+			height:auto;
+			font-family: 'Poiret One', cursive;
+			font-size:12px;
+			color:#FFFFFF;
+		    text-align:justify;
+			
+			}
+
+#colonna	{
+			margin: 0% 15% 0% 15%;
+			text-align:center;
+			width: auto;
+			height:auto;
+			font-family: 'Open Sans Condensed', sans-serif;
+			font-size:20px;
+			}
+			
+#div1		{
+			margin: 0 0 0 0;
+			background-color: #2A8985;
+			width: auto;
+			height:auto;
+			padding:5% 10% 5% 10%;
+			text-align:center;
+			color:#FFFFFF;
+			}
+#div2		{
+			margin: 0 0 0 0;
+			background-color: #E5F368; /* è preceduto da un livello nelle altre pagine presenti negli altri CSS*/
+			width: auto;
+			height:auto;
+			padding:5% 10% 5% 10%;
+			border-radius: 0px 0px 0px 0px;
+			text-align:justify;
+			}
+			
+			#div2 a 	{
+			color: blue;
+			}
+#div2 a:hover 	{
+			color: red;
+			}
+#div3		{
+			margin: 0 0 0 0;
+		    background-color: #FD7F35;
+			width: auto;
+			height:auto;
+			padding:5% 10% 5% 10%;
+			color:#FFFFFF;
+			text-align:justify;
+			border-radius: 0px 0px 0px 0px;
+			}
+			
+		#footer		{
+			margin: 5% 0 0 0;
+		    background-color: #6E6969;
+			width: auto;
+			height:auto;
+			padding:5% 10% 5% 10%;
+			color:#FFFFFF;
+			text-align:center;
+			border-radius: 0px 0px 0px 0px;
+			padding: 2.5% 0 2.5% 0;
+			}
+a 			{
+			text-decoration: none;
+			color: #000000;
+			}
+a:hover		{
+			color: blue;
+			}
+img:hover	{
+			opacity: 0.5;
+			}
