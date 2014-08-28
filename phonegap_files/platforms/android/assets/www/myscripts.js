@@ -1,5 +1,5 @@
 // JavaScript Document
-var coordinates, checkpoints=[], riddlerIndex, maxRiddler, riddlerShuffler=[], riddlerCheckName=[], riddlerViewer=[], actualCheckpointIndex=-1, foundACheckpointLately=1, CNAME, COORDS, HOWCLOSE=-1, totalScore=0, myScore=0, maxTime=600, timeLeft=600, maxScorePerPerson=0, winningScore=0, distance=999.99, finishedCheckpoints=0, toPrint="", funct, standStillCounter, standStillCoords;
+var coordinates, checkpoints=[], riddlerIndex, maxRiddler, riddlerShuffler=[], riddlerCheckName=[], riddlerViewer=[], actualCheckpointIndex=-1, foundACheckpointLately=1, CNAME, COORDS, HOWCLOSE=-1, totalScore=0, myScore=0, maxTime=1000, timeLeft=1000, maxScorePerPerson=0, winningScore=0, distance=999.99, finishedCheckpoints=0, toPrint="", funct, standStillCounter, standStillCoords;
 //Local Storage Variables: PlayerID, PlayerUsername, NumOfPlayers
 var server="http://188.153.39.89:8080";
 function printCoords()
