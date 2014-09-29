@@ -54,7 +54,7 @@
 			text-align:justify;
 			}
 			
-			#div2 a 	{
+#div2 a 	{
 			color: blue;
 			}
 #div2 a:hover 	{
@@ -70,9 +70,8 @@
 			text-align:justify;
 			border-radius: 0px 0px 0px 0px;
 			}
-			
-		#footer		{
-			margin: 5% 0 0 0;
+#footer		{
+			margin: 0 0 0 0;
 		    background-color: #6E6969;
 			width: auto;
 			height:auto;
@@ -80,7 +79,7 @@
 			color:#FFFFFF;
 			text-align:center;
 			border-radius: 0px 0px 0px 0px;
-			padding: 2.5% 0 2.5% 0;
+			padding: 0% 0 0% 0;
 			}
 a 			{
 			text-decoration: none;
